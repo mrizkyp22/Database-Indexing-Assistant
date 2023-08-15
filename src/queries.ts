@@ -1,4 +1,6 @@
 import { QueryInfo } from "./model";
-import * as jsonData from '../assets/data.json';
+import * as fs from 'fs';
 
-export const queryInfos: QueryInfo[] = jsonData
+// Read data from data.json
+const rawData = fs.readFileSync('assets/data.json', 'utf-8');
+export const queryInfos: QueryInfo[] = JSON.parse(rawData);
