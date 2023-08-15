@@ -7,13 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --watch src --exec ts-node src/scan.ts  --files",
     "dev": "ts-node src/scanner.ts  --files",
-    "xlsx": "ts-node src/run.ts  --files"
+    "json": "ts-node src/jsonconvert.ts  --files"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/mongodb": "^4.0.7",
+    "fs": "0.0.1-security",
     "mongodb": "^5.7.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6",

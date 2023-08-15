@@ -1,0 +1,15 @@
+[{
+    "database": "test",
+    "collection": "users",
+    "queries": [
+        { "userId": "userid090820231791" },
+        { "roleId": "user" }
+    ]
+},
+{
+    "database": "test",
+    "collection": "auth",
+    "queries": [
+      {"roleId":"user"}
+    ]
+  }]

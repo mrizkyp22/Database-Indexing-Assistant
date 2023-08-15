@@ -2,6 +2,7 @@ import { MongoClient } from 'mongodb';
 import { queryInfos } from './queries';
 
 async function checkIndexUsage() {
+
   const uri = 'mongodb://localhost:2717'; // Update with your MongoDB URI
   const client = new MongoClient(uri);
 
@@ -9,6 +10,8 @@ async function checkIndexUsage() {
     await client.connect();
 
     for (const queryInfo of queryInfos) {
+      console.log("scanner.ts",queryInfo.database)
+
       const database = client.db(queryInfo.database);
       const collection = database.collection(queryInfo.collection);
 

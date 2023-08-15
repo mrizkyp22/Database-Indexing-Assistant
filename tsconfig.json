@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
-      "types": ["node", "mongodb"]
+      "types": ["node", "mongodb"],
+      "resolveJsonModule": true
     }
   }
