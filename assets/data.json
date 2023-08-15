@@ -1,22 +1,19 @@
 [
     {
-        "database": "test",
-        "collection": "users",
+        "database": "approvalmanagement",
+        "collection": "activity_log",
         "queries": [
             {
-                "userId": "userid090820231791"
-            },
-            {
-                "roleId": "user"
+                "activity": "get-summary-approval-process"
             }
         ]
     },
     {
-        "database": "test",
-        "collection": "auth",
+        "database": "approvalmanagement",
+        "collection": "approval",
         "queries": [
             {
-                "roleId": "user"
+                "approvalId": "APP-1691988416299"
             }
         ]
     }

@@ -1,6 +1,10 @@
 {
     "compilerOptions": {
-      "types": ["node", "mongodb"],
-      "resolveJsonModule": true
+      "types": ["node", "mongodb", "jest"],
+      "resolveJsonModule": true,
+      "target": "ES6", // Or your desired target version
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true
     }
   }
