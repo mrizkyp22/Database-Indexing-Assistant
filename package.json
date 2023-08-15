@@ -1,0 +1,19 @@
+{
+  "name": "scan-db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --watch src --exec ts-node src/scan.ts  --files",
+    "dev": "tsc src/scan.ts && node src/scan.js",
+    "dev2": "tsc src/scanner.ts && node src/scanner.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/mongodb": "^4.0.7",
+    "mongodb": "^5.7.0"
+  }
+}
