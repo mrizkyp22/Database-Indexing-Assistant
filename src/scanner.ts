@@ -12,6 +12,9 @@ export async function checkIndexUsage() {
   try {
     await client.connect();
 
+    // Add header to the PDF document
+    pdfDoc.font('Helvetica-Bold').fontSize(18).text('Indexing Result', { align: 'center' });
+
     for (const queryInfo of queryInfos) {
       const database = client.db(queryInfo.database);
       const collection = database.collection(queryInfo.collection);
@@ -21,25 +24,28 @@ export async function checkIndexUsage() {
         const executionStages = explainOutput.executionStats.executionStages;
         const stage = executionStages.stage;
 
-        pdfDoc.text(`Database: ${queryInfo.database}, Collection: ${queryInfo.collection}`);
-        pdfDoc.text(`Query Check: ${JSON.stringify(query)}`);
+        pdfDoc.font('Helvetica').fontSize(12);
+        pdfDoc.moveDown();
+
+        pdfDoc.text('Database: ', { continued: true }).font('Helvetica-Bold').text(`${queryInfo.database}`, { continued: true }).font('Helvetica').text(' || Collection: ',{ continued: true }).font('Helvetica-Bold').text(`${queryInfo.collection}`).font('Helvetica');
+        pdfDoc.text('Query Check: ', { continued: true }).font('Helvetica-Bold').text(`${JSON.stringify(query)}`).font('Helvetica');
 
         if (stage === "COLLSCAN") {
-          pdfDoc.text('Result: Used a COLLSCAN (collection scan) without index.');
+          pdfDoc.text('Result: Used an ', { continued: true }).font('Helvetica-Bold').text('COLLSCAN (collection scan)', { continued: true }).font('Helvetica').text(' without index..');
+
         } else if (stage === "FETCH") {
           const inputStage = executionStages.inputStage;
           const inputStageType = inputStage.stage;
 
           if (inputStageType === "IXSCAN") {
-            pdfDoc.text('Result: Used an IXSCAN index.');
+            pdfDoc.text('Result: Used an ', { continued: true }).font('Helvetica-Bold').text('IXSCAN', { continued: true }).font('Helvetica').text(' index.');
           } else {
             pdfDoc.text('Result: Used a different index type or combination.');
           }
         } else {
           pdfDoc.text('Result: Used a different execution stage.');
         }
-
-        pdfDoc.moveDown(); // Add some spacing between logs
+        pdfDoc.text('=================================================');
       }
     }
   } catch (error) {
@@ -48,7 +54,7 @@ export async function checkIndexUsage() {
     await client.close();
 
     // Save the PDF document to a file
-    pdfDoc.pipe(fs.createWriteStream('index_usage_report.pdf')); // Adjust the file name as needed
+    pdfDoc.pipe(fs.createWriteStream('index_usage_report3.pdf')); // Adjust the file name as needed
     pdfDoc.end();
   }
 }

@@ -16,5 +16,14 @@
                 "approvalId": "APP-1691988416299"
             }
         ]
+    },
+    {
+        "database": "approvalmanagement",
+        "collection": "approval",
+        "queries": [
+            {
+                "createdBy": "superadmin"
+            }
+        ]
     }
 ]
