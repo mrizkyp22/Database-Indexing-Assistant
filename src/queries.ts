@@ -8,7 +8,7 @@ const sheet = workbook.Sheets[sheetName];
 const jsonData = XLSX.utils.sheet_to_json(sheet);
 
 export const queryInfos: QueryInfo[] = jsonData.map((entry: any) => {
-    const queries: { [key: string]: string | boolean }[] = [];
+    const queries: { [key: string]: string | boolean | number}[] = [];
 
     const queryGroups = entry.queries.match(/\{.*?\}/g);
 

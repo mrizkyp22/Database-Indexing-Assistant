@@ -20,17 +20,18 @@ export async function checkIndexUsage() {
 
     const timestamp = new Date().toISOString().replace(/:/g, '-');
     const pdfFileName = `reports/index_usage_report_${timestamp}.pdf`;
+
     pdfDoc.pipe(fs.createWriteStream(pdfFileName));
 
     pdfDoc.font('Helvetica-Bold').fontSize(18).text('Indexing Result', { align: 'center' });
 
     for (const queryInfo of queryInfos) {
-      // console.log(queryInfo)
+      console.log(queryInfo)
       const database = client.db(queryInfo.database);
       const collection = database.collection(queryInfo.collection);
 
       for (const query of queryInfo.queries) {
-        console.log(query)
+        // console.log(query)
         const explainOutput = await collection.find(query).explain('executionStats');
         const executionStages = explainOutput.executionStats.executionStages;
         const stage = executionStages.stage;
