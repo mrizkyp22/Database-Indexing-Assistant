@@ -1,10 +1,11 @@
 import { MongoClient } from 'mongodb';
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
-import { queryInfos } from './queries';
+import { queryInfos } from './xcelGenerate';
 
 export async function checkIndexUsage() {
   const uri = 'mongodb://apm:kwBYomFR5b62Uptx@localhost:2003/?authSource=approvalmanagement';
+  // const uri = 'mongodb://localhost:2717';
   const client = new MongoClient(uri);
 
   const pdfDoc = new PDFDocument();
@@ -17,15 +18,17 @@ export async function checkIndexUsage() {
   try {
     await client.connect();
 
-    pdfDoc.pipe(fs.createWriteStream('index_usage_report3.pdf'));
+    pdfDoc.pipe(fs.createWriteStream('index_usage_report6.pdf'));
 
     pdfDoc.font('Helvetica-Bold').fontSize(18).text('Indexing Result', { align: 'center' });
 
     for (const queryInfo of queryInfos) {
+      // console.log(queryInfo)
       const database = client.db(queryInfo.database);
       const collection = database.collection(queryInfo.collection);
 
       for (const query of queryInfo.queries) {
+        console.log(query)
         const explainOutput = await collection.find(query).explain('executionStats');
         const executionStages = explainOutput.executionStats.executionStages;
         const stage = executionStages.stage;
