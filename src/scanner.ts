@@ -27,8 +27,9 @@ export async function checkIndexUsage() {
 
     pdfDoc.font('Helvetica-Bold').fontSize(18).text('Indexing Result', { align: 'center' });
 
+
     for (const queryInfo of queryInfos) {
-      console.log(queryInfo)
+      // console.log(queryInfo)
       const database = client.db(queryInfo.database);
       const collection = database.collection(queryInfo.collection);
       const nameIndex = queryInfo.nameIndex;
@@ -40,6 +41,9 @@ export async function checkIndexUsage() {
       for (const query of queryInfo.queries) {
         // console.log(query)
         explainOutput = await collection.find(query).explain('executionStats');
+        const sampleOutput = await collection.findOne(query)
+        console.log(JSON.stringify(sampleOutput, null, 2));
+        const sampleValue = JSON.stringify(sampleOutput, null, 2)
         executionStages = explainOutput.executionStats.executionStages;
         stage = executionStages.stage;
 
@@ -94,9 +98,11 @@ export async function checkIndexUsage() {
         } else {
           pdfDoc.text('Result: Used a different execution stage.');
         }
-        pdfDoc.text('=================================================');
-        
-      }
+        pdfDoc.fillColor('blue');
+        pdfDoc.text('Sample Value:');
+        pdfDoc.text(sampleValue);
+        pdfDoc.fillColor('black');
+        pdfDoc.text('=================================================');      }
     }
 
     // Add summary section below the header
