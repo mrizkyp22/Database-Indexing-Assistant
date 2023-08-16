@@ -2,9 +2,11 @@ import { MongoClient } from 'mongodb';
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import { queryInfos } from './queries';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export async function checkIndexUsage() {
-  const uri = 'mongodb://apm:kwBYomFR5b62Uptx@localhost:2003/?authSource=approvalmanagement';
+  const uri:string = process.env.MONGODB_DATABASE_URL!;
   // const uri = 'mongodb://localhost:2717';
   const client = new MongoClient(uri);
 
@@ -29,12 +31,17 @@ export async function checkIndexUsage() {
       console.log(queryInfo)
       const database = client.db(queryInfo.database);
       const collection = database.collection(queryInfo.collection);
+      const nameIndex = queryInfo.nameIndex;
+      const indexes = JSON.parse(queryInfo.indexes);
+      console.log(indexes);
+
+      let explainOutput, executionStages, stage;
 
       for (const query of queryInfo.queries) {
         // console.log(query)
-        const explainOutput = await collection.find(query).explain('executionStats');
-        const executionStages = explainOutput.executionStats.executionStages;
-        const stage = executionStages.stage;
+        explainOutput = await collection.find(query).explain('executionStats');
+        executionStages = explainOutput.executionStats.executionStages;
+        stage = executionStages.stage;
 
         // Increment counters based on execution stage
         countTotal++;
@@ -47,6 +54,24 @@ export async function checkIndexUsage() {
           if (inputStageType === 'IXSCAN') {
             IXScanTotal++;
           }
+        }
+       
+
+        const checkIndexes = await collection.indexExists(nameIndex)
+        console.log('Sudah di create index (true->sudah): ',checkIndexes);
+        if (checkIndexes === false) {
+          console.log('Sedang Create Index :', nameIndex);
+          await collection.createIndexes([
+            {
+              key: indexes,
+              name: nameIndex
+            }
+          ])
+          console.log('Selesai Create Index dan Check Ulang query');
+          explainOutput = await collection.find(query).explain('executionStats');
+          executionStages = explainOutput.executionStats.executionStages;
+          stage = executionStages.stage;
+          console.log('Done Check query ulang');
         }
 
         // Add query information to the PDF document
@@ -69,7 +94,9 @@ export async function checkIndexUsage() {
         } else {
           pdfDoc.text('Result: Used a different execution stage.');
         }
-        pdfDoc.text('=================================================');      }
+        pdfDoc.text('=================================================');
+        
+      }
     }
 
     // Add summary section below the header

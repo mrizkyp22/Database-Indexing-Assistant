@@ -38,6 +38,8 @@ export const queryInfos: QueryInfo[] = jsonData.map((entry: any) => {
         database: entry.database,
         collection: entry.collection,
         queries: queries,
+        nameIndex: entry.nameIndex,
+        indexes: entry.indexes
     };
 });
 
