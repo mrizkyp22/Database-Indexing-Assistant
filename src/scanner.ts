@@ -26,13 +26,17 @@ export async function checkIndexUsage() {
     pdfDoc.font('Helvetica-Bold').fontSize(18).text('Indexing Result', { align: 'center' });
 
     for (const queryInfo of queryInfos) {
-      console.log(queryInfo)
+      // console.log(queryInfo)
       const database = client.db(queryInfo.database);
+
       const collection = database.collection(queryInfo.collection);
 
       for (const query of queryInfo.queries) {
         // console.log(query)
         const explainOutput = await collection.find(query).explain('executionStats');
+        const sampleOutput = await collection.findOne(query)
+        console.log(JSON.stringify(sampleOutput, null, 2));
+        const sampleValue = JSON.stringify(sampleOutput, null, 2)
         const executionStages = explainOutput.executionStats.executionStages;
         const stage = executionStages.stage;
 
@@ -69,6 +73,9 @@ export async function checkIndexUsage() {
         } else {
           pdfDoc.text('Result: Used a different execution stage.');
         }
+
+        pdfDoc.text('Sample Value:');
+        pdfDoc.text(sampleValue);
         pdfDoc.text('=================================================');      }
     }
 
