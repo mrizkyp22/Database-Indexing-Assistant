@@ -42,7 +42,18 @@ export async function checkIndexUsage() {
         // console.log(query)
         explainOutput = await collection.find(query).explain('executionStats');
         const sampleOutput = await collection.findOne(query)
-        console.log(JSON.stringify(sampleOutput, null, 2));
+        pdfDoc.font('Helvetica').fontSize(12);
+        pdfDoc.text('Field data:');
+        if (sampleOutput) {        
+          for (const fieldName in sampleOutput) {
+            console.log(`${fieldName} type:`, typeof sampleOutput[fieldName]);
+            const typeData = typeof sampleOutput[fieldName];
+            pdfDoc.text(`${fieldName} type: ${typeData}`);
+          }
+        } else {
+          console.log("No matching document found.");
+        }
+
         const sampleValue = JSON.stringify(sampleOutput, null, 2)
         executionStages = explainOutput.executionStats.executionStages;
         stage = executionStages.stage;
@@ -98,8 +109,8 @@ export async function checkIndexUsage() {
         } else {
           pdfDoc.text('Result: Used a different execution stage.');
         }
-        pdfDoc.fillColor('blue');
         pdfDoc.text('Sample Value:');
+        pdfDoc.fillColor('blue');
         pdfDoc.text(sampleValue);
         pdfDoc.fillColor('black');
         pdfDoc.text('=================================================');      }
