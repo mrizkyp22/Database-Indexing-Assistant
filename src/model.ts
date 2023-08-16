@@ -1,5 +1,5 @@
 export interface QueryInfo {
     database: string;
     collection: string;
-    queries: { [key: string]: string }[];
+    queries: { [key: string]: string | boolean }[];
 }

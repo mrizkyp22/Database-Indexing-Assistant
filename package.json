@@ -5,9 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch src --exec ts-node src/scan.ts  --files",
-    "dev": "ts-node src/scanner.ts  --files",
-    "json": "ts-node src/xcelgenerate.ts  --files"
+    "start": "ts-node src/scanner.ts  --files"
   },
   "keywords": [],
   "author": "",

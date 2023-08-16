@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
-import { queryInfos } from './xcelGenerate';
+import { queryInfos } from './queries';
 
 export async function checkIndexUsage() {
   const uri = 'mongodb://apm:kwBYomFR5b62Uptx@localhost:2003/?authSource=approvalmanagement';
@@ -18,7 +18,9 @@ export async function checkIndexUsage() {
   try {
     await client.connect();
 
-    pdfDoc.pipe(fs.createWriteStream('index_usage_report6.pdf'));
+    const timestamp = new Date().toISOString().replace(/:/g, '-');
+    const pdfFileName = `reports/index_usage_report_${timestamp}.pdf`;
+    pdfDoc.pipe(fs.createWriteStream(pdfFileName));
 
     pdfDoc.font('Helvetica-Bold').fontSize(18).text('Indexing Result', { align: 'center' });
 
