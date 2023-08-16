@@ -25,10 +25,10 @@ export async function checkIndexUsage() {
 
     pdfDoc.font('Helvetica-Bold').fontSize(18).text('Indexing Result', { align: 'center' });
 
+
     for (const queryInfo of queryInfos) {
       // console.log(queryInfo)
       const database = client.db(queryInfo.database);
-
       const collection = database.collection(queryInfo.collection);
 
       for (const query of queryInfo.queries) {
@@ -73,9 +73,10 @@ export async function checkIndexUsage() {
         } else {
           pdfDoc.text('Result: Used a different execution stage.');
         }
-
+        pdfDoc.fillColor('blue');
         pdfDoc.text('Sample Value:');
         pdfDoc.text(sampleValue);
+        pdfDoc.fillColor('black');
         pdfDoc.text('=================================================');      }
     }
 
